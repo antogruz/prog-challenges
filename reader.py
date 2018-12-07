@@ -1,25 +1,21 @@
 #!/usr/bin/env python3
 
 import os
+from request import get_file_with_cookie, get_page_with_cookie
 
-tmp = "tmp.txt"
+tmp = "tmp.png"
 address = "https://www.newbiecontest.org/epreuves/prog/prog10.php"
-sessid = "387c6a652eeb756a10f99d8f6bf37634"
-answer_address = "https://www.newbiecontest.org/epreuves/prog/verifpr10.php"
+answer_address = "https://www.newbiecontest.org/epreuves/prog/verifpr10.php?chaine={}"
 
 def main():
-    file = get_file(address)
-    text = read_file(file)
-    print(text)
-
-def get_file(address):
-    os.system("wget {} -o {}".format(address,tmp))
-    return tmp
+    get_file_with_cookie(address, tmp)
+    text = read_file(tmp)
+    answer = get_page_with_cookie(answer_address.format(text))
+    print(answer)
 
 def read_file(f):
     text = os.popen('gocr {}'.format(f)).read()
     text = text.split("\n")[0]
     return text
-
 
 main()
